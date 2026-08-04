@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Fingerprint Lab · Local test origin</title>
+  <style>
+    :root { --ink:#192b33; --muted:#647078; --paper:#f4f3ed; --line:#d9dedb; --teal:#196b65; --gold:#e8b35b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.6 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; }
+    main { max-width:1120px; margin:0 auto; padding:38px 24px 50px; }
+    header { border-bottom:1px solid var(--line); padding-bottom:30px; margin-bottom:26px; }
+    .brand { display:flex; align-items:center; gap:10px; font-weight:700; letter-spacing:.04em; }
+    .brand-mark { width:30px; height:30px; display:grid; place-items:center; background:var(--ink); color:var(--paper); border-radius:8px; font-size:18px; }
+    .eyebrow { color:var(--teal); font-size:12px; letter-spacing:.13em; text-transform:uppercase; font-weight:700; margin:28px 0 8px; }
+    h1 { font-size:clamp(30px,5vw,47px); letter-spacing:-.035em; line-height:1.1; margin:0 0 13px; }
+    .intro { max-width:690px; color:var(--muted); margin:0; font-size:16px; }
+    .notice { display:flex; gap:12px; align-items:flex-start; background:#fff7e8; border:1px solid #e9d7b5; border-radius:12px; padding:15px 18px; margin-bottom:24px; }
+    .notice strong { display:block; font-size:14px; }
+    .notice p { margin:2px 0 0; color:#786344; font-size:13px; }
+    .dot { width:8px; height:8px; flex:none; margin-top:8px; background:var(--gold); border-radius:50%; }
+    .grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+    section { background:#fff; border:1px solid var(--line); border-radius:15px; overflow:hidden; }
+    .card-top { padding:23px 24px 17px; }
+    .label { font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase; color:var(--teal); }
+    h2 { margin:5px 0 5px; font-size:21px; letter-spacing:-.025em; }
+    .description { color:var(--muted); font-size:13px; margin:0 0 17px; }
+    .controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    label { display:block; color:var(--muted); font-size:12px; margin:0 0 5px; }
+    input,textarea,select,button { font:inherit; border-radius:7px; }
+    input,textarea,select { min-width:0; border:1px solid var(--line); background:#fbfcfb; color:var(--ink); padding:8px 10px; }
+    input { flex:1; width:140px; }
+    textarea { width:100%; min-height:66px; resize:vertical; font-family:ui-monospace,monospace; font-size:12px; margin:9px 0; }
+    button { cursor:pointer; padding:8px 12px; border:1px solid var(--line); background:#fff; color:var(--ink); font-size:12px; font-weight:600; }
+    button.primary { background:var(--teal); color:#fff; border-color:var(--teal); }
+    button:hover { filter:brightness(.95); }
+    button:disabled { opacity:.5; cursor:wait; }
+    input:focus,textarea:focus,select:focus,button:focus-visible { outline:2px solid var(--teal); outline-offset:2px; }
+    .output { border-top:1px solid #e9eeeb; background:#f8faf9; padding:16px 24px; }
+    .output-title { display:flex; justify-content:space-between; font-size:10px; letter-spacing:.08em; text-transform:uppercase; color:var(--muted); }
+    pre { margin:9px 0 0; white-space:pre-wrap; overflow-wrap:anywhere; font:12px/1.65 ui-monospace,SFMono-Regular,Consolas,monospace; max-height:240px; overflow:auto; }
+    .wide { grid-column:1/-1; }
+    .stream-controls { margin-top:13px; }
+    .meta { font:11px/1.5 ui-monospace,monospace; color:var(--muted); margin:11px 0 0; }
+    footer { margin-top:25px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; font-size:12px; }
+    @media (max-width:690px) { main { padding:25px 16px; } .grid { grid-template-columns:1fr; } .card-top { padding:20px; } .output { padding:15px 20px; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="brand"><span class="brand-mark" aria-hidden="true">≋</span> FINGERPRINT LAB</div>
+    <p class="eyebrow">Local test origin</p>
+    <h1>See what survives the proxy.</h1>
+    <p class="intro">A small, repeatable browser test for sessions, HTTP requests, redirects, and live connections. Open this page directly or through the lab proxy.</p>
+  </header>
+  <aside class="notice">
+    <span class="dot" aria-hidden="true"></span>
+    <div><strong>Local HTTP fixture: TLS fingerprints not measured.</strong><p>The challenge and rate-limit routes simulate response types. They do not run Cloudflare or demonstrate access to protected websites.</p></div>
+  </aside>
+  <div class="grid">
+    <section aria-labelledby="session-title">
+      <div class="card-top">
+        <span class="label">01 / Session</span><h2 id="session-title">Keep a login working</h2>
+        <p class="description">Sign in with a demo name. The server sets an HTTP-only cookie and returns the same user on session checks.</p>
+        <label for="user">Demo name</label>
+        <form id="login-form" class="controls"><input id="user" name="user" value="Ada" maxlength="128" required><button class="primary" type="submit">Sign in</button></form>
+        <div class="controls stream-controls"><button id="check-session" type="button">Check session</button><button id="logout" type="button">Sign out</button></div>
+      </div>
+      <div class="output"><div class="output-title"><span>Session response</span><span>/login · /session</span></div><pre id="session-output" aria-live="polite">No session checked yet.</pre></div>
+    </section>
+    <section aria-labelledby="request-title">
+      <div class="card-top">
+        <span class="label">02 / HTTP</span><h2 id="request-title">Inspect a request</h2>
+        <p class="description">Echo the method, query, safe headers, and body received by this server. Credentials are omitted from the header report.</p>
+        <div class="controls"><select id="method" aria-label="Request method"><option>POST</option><option>GET</option><option>PUT</option></select><input id="query" aria-label="Query value" value="browser"><button id="echo" class="primary" type="button">Send request</button></div>
+        <label for="body" style="margin-top:10px">Request body (POST / PUT)</label><textarea id="body">{"message":"hello from the browser"}</textarea>
+      </div>
+      <div class="output"><div class="output-title"><span>Request echo</span><span>/echo</span></div><pre id="echo-output" aria-live="polite">Waiting for a request.</pre></div>
+    </section>
+    <section aria-labelledby="redirect-title">
+      <div class="card-top">
+        <span class="label">03 / Response handling</span><h2 id="redirect-title">Follow the response</h2>
+        <p class="description">Try a redirect, a mock challenge, a generic block, or a rate-limit response with Retry-After.</p>
+        <div class="controls"><button data-route="/redirect" class="primary" type="button">Redirect</button><button data-route="/challenge" type="button">Mock challenge</button><button data-route="/blocked" type="button">403 block</button><button data-route="/rate-limit" type="button">429 limit</button></div>
+        <div class="controls stream-controls"><button id="stream" type="button">Read streaming response</button></div>
+        <p class="meta">/stream sends three chunks, 250 ms apart.</p>
+      </div>
+      <div class="output"><div class="output-title"><span>Response report</span><span>Simulated fixtures</span></div><pre id="response-output" aria-live="polite">Choose a response to inspect.</pre></div>
+    </section>
+    <section aria-labelledby="socket-title">
+      <div class="card-top">
+        <span class="label">04 / WebSocket</span><h2 id="socket-title">Keep the connection open</h2>
+        <p class="description">Open a live connection to this server. Each message is echoed back unchanged.</p>
+        <div class="controls"><button id="connect" class="primary" type="button">Connect</button><button id="disconnect" type="button">Disconnect</button></div>
+        <form id="socket-form" class="controls stream-controls"><input id="socket-message" aria-label="WebSocket message" value="hello over WebSocket"><button type="submit">Send message</button></form>
+        <p class="meta" id="socket-state">Connection closed.</p>
+      </div>
+      <div class="output"><div class="output-title"><span>Connection log</span><span>/ws</span></div><pre id="socket-output" aria-live="polite">No messages yet.</pre></div>
+    </section>
+  </div>
+  <footer><span>All requests stay on this origin.</span><span>Repeatable tests · No external assets</span></footer>
+</main>
+<script>
+  const element = id => document.getElementById(id);
+  const show = (id, value) => { element(id).textContent = typeof value === 'string' ? value : JSON.stringify(value, null, 2); };
+  async function request(path, options = {}) {
+    const response = await fetch(path, { credentials: 'same-origin', ...options });
+    const text = await response.text();
+    let body;
+    try { body = JSON.parse(text); } catch { body = text; }
+    return {
+      status: response.status,
+      url: response.url,
+      redirected: response.redirected,
+      headers: Object.fromEntries(response.headers.entries()),
+      body
+    };
+  }
+  async function report(output, action) {
+    try { show(output, await action()); } catch (error) { show(output, `Request failed: ${error.message}`); }
+  }
+  element('login-form').addEventListener('submit', event => {
+    event.preventDefault();
+    report('session-output', () => request('/login', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user: element('user').value })
+    }));
+  });
+  element('check-session').addEventListener('click', () => report('session-output', () => request('/session')));
+  element('logout').addEventListener('click', () => report('session-output', () => request('/logout', { method: 'POST' })));
+  element('echo').addEventListener('click', () => {
+    const method = element('method').value;
+    const options = { method };
+    if (method !== 'GET') {
+      options.headers = { 'Content-Type': 'application/json' };
+      options.body = element('body').value;
+    }
+    report('echo-output', () => request(`/echo?source=${encodeURIComponent(element('query').value)}`, options));
+  });
+  document.querySelectorAll('[data-route]').forEach(button => {
+    button.addEventListener('click', () => report('response-output', () => request(button.dataset.route)));
+  });
+  element('stream').addEventListener('click', async () => {
+    const button = element('stream');
+    button.disabled = true;
+    const start = performance.now();
+    let log = '';
+    show('response-output', 'Opening stream…');
+    try {
+      const response = await fetch('/stream');
+      if (!response.body) throw new Error('This browser did not expose the response stream');
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      log = `HTTP ${response.status}\n`;
+      for (;;) {
+        const { value, done } = await reader.read();
+        if (done) break;
+        log += `[${Math.round(performance.now() - start)} ms] ${decoder.decode(value, { stream: true })}`;
+        show('response-output', log);
+      }
+      log += decoder.decode();
+      show('response-output', `${log}Stream finished.`);
+    } catch (error) { show('response-output', `${log}\nStream failed: ${error.message}`); }
+    finally { button.disabled = false; }
+  });
+  let socket;
+  let socketLog = '';
+  const appendSocket = message => {
+    socketLog = `${socketLog}${message}\n`.slice(-12000);
+    show('socket-output', socketLog);
+  };
+  element('connect').addEventListener('click', () => {
+    if (socket && socket.readyState !== WebSocket.CLOSED) {
+      appendSocket('A connection is already open or opening.');
+      return;
+    }
+    const url = new URL('/ws', location.href);
+    url.protocol = location.protocol === 'https:' ? 'wss:' : 'ws:';
+    try { socket = new WebSocket(url); }
+    catch (error) { appendSocket(`Could not open connection: ${error.message}`); return; }
+    element('socket-state').textContent = 'Opening connection…';
+    socket.addEventListener('open', () => { element('socket-state').textContent = 'Connection open.'; appendSocket('Connected.'); });
+    socket.addEventListener('message', event => appendSocket(`Received: ${event.data}`));
+    socket.addEventListener('error', () => appendSocket('Connection error. Check the proxy upgrade support.'));
+    socket.addEventListener('close', event => { element('socket-state').textContent = 'Connection closed.'; appendSocket(`Closed (${event.code}).`); });
+  });
+  element('disconnect').addEventListener('click', () => { if (socket) socket.close(); });
+  element('socket-form').addEventListener('submit', event => {
+    event.preventDefault();
+    if (!socket || socket.readyState !== WebSocket.OPEN) { appendSocket('Connect before sending a message.'); return; }
+    const message = element('socket-message').value;
+    socket.send(message);
+    appendSocket(`Sent: ${message}`);
+  });
+</script>
+</body>
+</html>

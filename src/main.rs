@@ -1,3 +1,6 @@
-fn main() {
-    println!("Fingerprint Lab");
+mod cli;
+
+#[tokio::main]
+async fn main() -> std::process::ExitCode {
+    cli::run_main().await
 }

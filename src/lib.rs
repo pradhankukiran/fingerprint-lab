@@ -1,4 +1,5 @@
 pub mod campaign;
+pub mod doctor;
 pub mod external;
 pub mod fixture;
 pub mod history;
